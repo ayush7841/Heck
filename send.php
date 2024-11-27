@@ -1,24 +1,19 @@
 <?php
-// Path to the static file you want to send and clear
-$file = 'message.txt';
+// Set content type to JSON
+header('Content-Type: application/json');
+
+// Path to the text file
+$filename = "message.txt";
 
 // Check if the file exists
-if (file_exists($file)) {
-    // Get the file contents
-    $fileContent = file_get_contents($file);
+if (file_exists($filename)) {
+    // Read the file contents
+    $data = file_get_contents($filename);
 
-    // Set the content-type header (optional, depending on how you want to serve the file)
-    header('Content-Type: text/plain');
-    
-    // Send the file content as the response to the client
-    echo $fileContent;
-
-    // Clear the file data by overwriting it with an empty string
-    file_put_contents($file, ''); // This empties the file
-
+    // Respond with the file content as JSON
+    echo json_encode(["status" => "success", "data" => $data]);
 } else {
-    // If the file doesn't exist, return an error message
-    header('HTTP/1.1 404 Not Found');
-    echo "Error: File not found.";
+    // Respond with an error if the file doesn't exist
+    echo json_encode(["status" => "error", "message" => "File not found"]);
 }
 ?>
